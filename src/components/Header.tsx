@@ -22,7 +22,7 @@ export function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <Link href="/" className="flex items-center gap-2">
           <span className="font-display text-xl font-semibold tracking-tight text-ink">
-            সতর্কো
+            সতর্ক
           </span>
           <span className="hidden text-sm text-text-soft sm:inline">Sotorko</span>
         </Link>
