@@ -10,11 +10,11 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 py-16">
       <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
-        {isBn ? "সতর্কো সম্পর্কে" : "About Sotorko"}
+        {isBn ? "সতর্ক সম্পর্কে" : "About Sotorko"}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-text-soft">
         {isBn
-          ? "সতর্কো ঢাকার নারীদের জন্য একটি অলাভজনক, ক্রাউডসোর্সড নিরাপত্তা মানচিত্র। আমাদের লক্ষ্য নারীদের নিরাপত্তা তথ্য দিয়ে সজ্জিত করা, যাতে তারা সতর্কতার সাথে চলাচল করতে পারেন এবং জনসাধারণের মধ্যে সচেতনতা তৈরি করতে পারে।"
+          ? "সতর্ক ঢাকার নারীদের জন্য একটি অলাভজনক, ক্রাউডসোর্সড নিরাপত্তা মানচিত্র। আমাদের লক্ষ্য নারীদের নিরাপত্তা তথ্য দিয়ে সজ্জিত করা, যাতে তারা সতর্কতার সাথে চলাচল করতে পারেন এবং জনসাধারণের মধ্যে সচেতনতা তৈরি করতে পারে।"
           : "Sotorko is a non-profit, crowdsourced safety map built for women navigating Dhaka. Our mission is to give women the safety information they need to move through the city with awareness — and to build public pressure for safer public spaces."}
       </p>
 
@@ -51,7 +51,7 @@ export default function AboutPage() {
           title={isBn ? "আইনি ও নৈতিক সীমানা" : "Legal & ethical boundaries"}
           body={
             isBn
-              ? "সতর্কো নির্দিষ্ট ব্যক্তিদের নাম প্রকাশের অনুমতি দেয় না। আমরা অনিরাপদ স্থান চিহ্নিত করি, ব্যক্তিগত অভিযোগ নয়।"
+              ? "সতর্ক নির্দিষ্ট ব্যক্তিদের নাম প্রকাশের অনুমতি দেয় না। আমরা অনিরাপদ স্থান চিহ্নিত করি, ব্যক্তিগত অভিযোগ নয়।"
               : "Sotorko does not allow naming specific individuals. We document unsafe locations, not personal accusations — that is a matter for law enforcement."
           }
         />
