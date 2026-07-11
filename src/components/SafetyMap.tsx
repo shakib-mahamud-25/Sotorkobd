@@ -1,9 +1,8 @@
 "use client";
 
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
-import "leaflet.heat";
 import type { Report } from "@/types";
 import { getCategoryLabel, getSeverityColor } from "@/lib/categories";
 import { useI18n } from "@/lib/i18n/context";
@@ -29,20 +28,52 @@ function createSeverityIcon(severity: number): L.DivIcon {
 function HeatLayer({ reports }: { reports: Report[] }) {
   const map = useMap();
   const layerRef = useRef<L.Layer | null>(null);
+  const [heatReady, setHeatReady] = useState(false);
+
+  // leaflet.heat attaches L.heatLayer as a side effect and expects `L` to
+  // already exist on window when it runs. Importing it at module load time
+  // can race against Leaflet's own initialization under Next.js's bundler,
+  // which silently no-ops instead of erroring — so we import it here,
+  // inside an effect, after we know Leaflet + the map are mounted.
+  useEffect(() => {
+    let cancelled = false;
+    (window as unknown as { L: typeof L }).L = L; // leaflet.heat reads window.L
+    import("leaflet.heat").then(() => {
+      if (!cancelled) setHeatReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
+    if (!heatReady) return;
+
     if (layerRef.current) {
       map.removeLayer(layerRef.current);
+      layerRef.current = null;
     }
+
+    if (reports.length === 0) return;
+
     const points = reports.map(
-      (r) => [r.latitude, r.longitude, r.severity / 5] as [number, number, number]
+      (r) => [r.latitude, r.longitude, 0.4 + (r.severity / 5) * 0.6] as [number, number, number]
     );
+
     // @ts-expect-error leaflet.heat extends L with heatLayer at runtime
     const heat = L.heatLayer(points, {
-      radius: 28,
-      blur: 22,
-      maxZoom: 16,
-      gradient: { 0.2: "#1D4E5F", 0.5: "#C9793E", 0.8: "#8A2E2E" },
+      radius: 32,
+      blur: 24,
+      maxZoom: 17,
+      max: 1.0,
+      minOpacity: 0.35,
+      gradient: {
+        0.1: "#1D4E5F", // calm teal — low intensity
+        0.35: "#3D7A6E",
+        0.55: "#C9793E", // amber — moderate
+        0.75: "#D9622E",
+        1.0: "#8A2E2E", // brick red — high intensity
+      },
     });
     heat.addTo(map);
     layerRef.current = heat;
@@ -50,7 +81,7 @@ function HeatLayer({ reports }: { reports: Report[] }) {
     return () => {
       if (layerRef.current) map.removeLayer(layerRef.current);
     };
-  }, [reports, map]);
+  }, [reports, map, heatReady]);
 
   return null;
 }
