@@ -12,7 +12,7 @@ export function Footer() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm">
             <span className="font-display text-lg font-semibold text-ink">
-              সতর্কো Sotorko
+              সতর্ক Sotorko
             </span>
             <p className="mt-2 text-sm leading-relaxed text-text-soft">
               {t("footer.mission")}
