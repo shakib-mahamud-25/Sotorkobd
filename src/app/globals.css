@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Sotorko design tokens */
+  --color-ink: #0f2a3d;         /* deep teal-navy — primary/trust */
+  --color-ink-mid: #1d4e5f;     /* mid teal — secondary */
+  --color-paper: #f7f4ee;       /* warm off-white background */
+  --color-paper-raised: #ffffff;
+  --color-amber: #c9793e;       /* warm amber — sparing alert accent */
+  --color-brick: #8a2e2e;       /* muted brick red — high severity only */
+  --color-text: #2b3a3f;        /* body text on light */
+  --color-text-soft: #5c6b6e;
+  --color-line: #e2ddd0;        /* hairline borders */
+
+  --font-display: "Fraunces", "Noto Serif Bengali", serif;
+  --font-body: "Inter", "Noto Sans Bengali", sans-serif;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-ink-mid: var(--color-ink-mid);
+  --color-paper: var(--color-paper);
+  --color-paper-raised: var(--color-paper-raised);
+  --color-amber: var(--color-amber);
+  --color-brick: var(--color-brick);
+  --color-text: var(--color-text);
+  --color-text-soft: var(--color-text-soft);
+  --color-line: var(--color-line);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Focus visibility — accessibility floor, never remove */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Leaflet map container fixes */
+.leaflet-container {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+}
+
+/* Custom muted "dusk" tile filter for calm, non-alarming map styling */
+.dusk-tiles {
+  filter: saturate(0.55) brightness(1.03) contrast(0.96) sepia(0.06);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 42, 61, 0.15);
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-body);
+  margin: 14px 16px;
+}
