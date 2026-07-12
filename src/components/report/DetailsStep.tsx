@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n/context";
 import { Textarea } from "@/components/ui/Input";
 import { ImagePlus, X, ShieldCheck } from "lucide-react";
@@ -75,11 +76,7 @@ export function DetailsStep({
               key={i}
               className="group relative h-20 w-20 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] shadow-[var(--shadow-xs)]"
             >
-              <img
-                src={URL.createObjectURL(file)}
-                alt=""
-                className="h-full w-full object-cover"
-              />
+              <PhotoThumbnail file={file} />
               <button
                 type="button"
                 onClick={() => removePhoto(i)}
@@ -106,4 +103,20 @@ export function DetailsStep({
       </div>
     </div>
   );
+}
+
+function PhotoThumbnail({ file }: { file: File }) {
+  const [url, setUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const objectUrl = URL.createObjectURL(file);
+    setUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+
+  if (!url) {
+    return <div className="skeleton h-full w-full" />;
+  }
+
+  return <img src={url} alt="" className="h-full w-full object-cover" />;
 }

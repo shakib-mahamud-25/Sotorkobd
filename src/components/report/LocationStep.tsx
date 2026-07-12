@@ -108,7 +108,7 @@ export function LocationStep({
             <div className="text-sm font-semibold">{t("report.location.useGps")}</div>
             {mode === "gps" && gpsStatus === "denied" && (
               <div className="mt-0.5 text-xs text-[var(--color-danger)]">
-                Permission denied — try the map or dropdown below.
+                {t("report.location.gpsError")}
               </div>
             )}
           </div>
@@ -117,6 +117,8 @@ export function LocationStep({
           {t("report.location.useGpsHint")}
         </p>
       </div>
+
+      <Divider label={t("report.location.or")} />
 
       {/* Manual map pin */}
       <div>
@@ -135,6 +137,8 @@ export function LocationStep({
           />
         </div>
       </div>
+
+      <Divider label={t("report.location.or")} />
 
       {/* Dropdown */}
       <div>
@@ -157,6 +161,18 @@ export function LocationStep({
           ))}
         </Select>
       </div>
+    </div>
+  );
+}
+
+function Divider({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-3" aria-hidden="true">
+      <div className="h-px flex-1 bg-[var(--color-border)]" />
+      <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+        {label}
+      </span>
+      <div className="h-px flex-1 bg-[var(--color-border)]" />
     </div>
   );
 }

@@ -199,7 +199,7 @@ export default function ReportPage() {
             className={step === 1 ? "invisible" : ""}
           >
             <ChevronLeft size={16} />
-            Back
+            {t("report.back")}
           </Button>
 
           {step < TOTAL_STEPS ? (
@@ -210,7 +210,7 @@ export default function ReportPage() {
               onClick={() => setStep((s) => s + 1)}
               disabled={!canProceed()}
             >
-              Next
+              {t("report.next")}
               <ChevronRight size={16} />
             </Button>
           ) : (

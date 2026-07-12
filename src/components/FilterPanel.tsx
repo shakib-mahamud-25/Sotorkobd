@@ -48,6 +48,16 @@ export function FilterPanel({
 }) {
   const { t, locale } = useI18n();
 
+  const hasActiveFilters =
+    filters.categoryIds.length > 0 ||
+    filters.severityMin > 1 ||
+    filters.timeOfDay.length > 0 ||
+    filters.dateRange !== "all";
+
+  function clearFilters() {
+    onChange({ categoryIds: [], severityMin: 1, timeOfDay: [], dateRange: "all" });
+  }
+
   function toggleCategory(id: string) {
     const next = filters.categoryIds.includes(id)
       ? filters.categoryIds.filter((c) => c !== id)
@@ -90,9 +100,19 @@ export function FilterPanel({
         </button>
       </div>
 
-      <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
-        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-success)]" />
-        {resultCount} {t("map.reportCount")}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)]">
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-success)]" />
+          {resultCount} {t("map.reportCount")}
+        </div>
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="animate-fade-in text-xs font-semibold text-[var(--color-text-link)] transition-colors hover:text-[var(--color-primary)]"
+          >
+            {t("map.filters.clear")}
+          </button>
+        )}
       </div>
 
       {/* Date range */}

@@ -6,6 +6,7 @@ import L from "leaflet";
 import type { Report } from "@/types";
 import { getCategoryLabel, getSeverityColor } from "@/lib/categories";
 import { useI18n } from "@/lib/i18n/context";
+import { Check } from "lucide-react";
 
 const DHAKA_CENTER: [number, number] = [23.7808, 90.4];
 
@@ -106,6 +107,41 @@ function HeatLayer({ reports }: { reports: Report[] }) {
   return null;
 }
 
+function MapLegend({ viewMode }: { viewMode: "pins" | "heatmap" }) {
+  const { t } = useI18n();
+  const items: { color: string; labelKey: "map.legend.low" | "map.legend.moderate" | "map.legend.high" }[] = [
+    { color: "#1D4E5F", labelKey: "map.legend.low" },
+    { color: "#C9793E", labelKey: "map.legend.moderate" },
+    { color: "#8A2E2E", labelKey: "map.legend.high" },
+  ];
+
+  return (
+    <div className="pointer-events-none absolute bottom-4 left-4 z-[500]">
+      <div className="pointer-events-auto rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]/95 px-3.5 py-3 shadow-[var(--shadow-md)] backdrop-blur-sm">
+        <div className="text-label text-[var(--color-text-muted)]">{t("map.legend.title")}</div>
+        <div className="mt-2 flex items-center gap-3">
+          {items.map((item) => (
+            <div key={item.labelKey} className="flex items-center gap-1.5">
+              <span
+                className="h-2.5 w-2.5 flex-none rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              <span className="text-[11px] text-[var(--color-text-secondary)]">
+                {t(item.labelKey)}
+              </span>
+            </div>
+          ))}
+        </div>
+        {viewMode === "pins" && (
+          <div className="mt-1.5 text-[10px] text-[var(--color-text-muted)]">
+            {t("map.legend.pulseHint")}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function SafetyMap({
   reports,
   viewMode,
@@ -116,8 +152,15 @@ export function SafetyMap({
   onConfirm: (reportId: string) => void;
 }) {
   const { t, locale } = useI18n();
+  const [confirmedIds, setConfirmedIds] = useState<Set<string>>(new Set());
+
+  function handleConfirm(reportId: string) {
+    onConfirm(reportId);
+    setConfirmedIds((prev) => new Set(prev).add(reportId));
+  }
 
   return (
+    <>
     <MapContainer
       center={DHAKA_CENTER}
       zoom={12}
@@ -164,10 +207,20 @@ export function SafetyMap({
                     {new Date(report.created_at).toLocaleDateString()}
                   </span>
                   <button
-                    onClick={() => onConfirm(report.id)}
-                    className="rounded-full bg-[var(--color-primary)] px-2.5 py-1 text-[10px] font-semibold text-white transition-all duration-[var(--duration-base)] hover:bg-[var(--color-primary-hover)] active:scale-95"
+                    onClick={() => handleConfirm(report.id)}
+                    disabled={confirmedIds.has(report.id)}
+                    className="flex items-center gap-1 rounded-full bg-[var(--color-primary)] px-2.5 py-1 text-[10px] font-semibold text-white transition-all duration-[var(--duration-base)] hover:bg-[var(--color-primary-hover)] active:scale-95 disabled:opacity-70"
                   >
-                    {t("map.confirm")} ({report.confirm_count})
+                    {confirmedIds.has(report.id) ? (
+                      <>
+                        <Check size={10} strokeWidth={3} />
+                        {t("map.thanksConfirm")}
+                      </>
+                    ) : (
+                      <>
+                        {t("map.confirm")} ({report.confirm_count})
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -175,5 +228,7 @@ export function SafetyMap({
           </Marker>
         ))}
     </MapContainer>
+    <MapLegend viewMode={viewMode} />
+    </>
   );
 }

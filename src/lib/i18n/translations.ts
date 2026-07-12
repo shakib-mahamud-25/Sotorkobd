@@ -91,6 +91,13 @@ export const translations = {
     "map.confirm": "I experienced this too",
     "map.confirmed": "Confirmed",
     "map.reportCount": "reports",
+    "map.filters.clear": "Clear all",
+    "map.legend.title": "Severity",
+    "map.legend.low": "Low",
+    "map.legend.moderate": "Moderate",
+    "map.legend.high": "High",
+    "map.legend.pulseHint": "Pulsing = high severity",
+    "map.thanksConfirm": "Thanks",
 
     // Admin
     "admin.login.title": "Admin login",
@@ -100,9 +107,20 @@ export const translations = {
     "admin.dashboard.title": "Moderation dashboard",
     "admin.dashboard.flagged": "Flagged",
     "admin.dashboard.published": "Published",
+    "admin.dashboard.hidden": "Hidden",
+    "admin.dashboard.removed": "Removed",
     "admin.dashboard.approve": "Approve",
     "admin.dashboard.hide": "Hide",
     "admin.dashboard.remove": "Remove",
+    "admin.dashboard.logout": "Log out",
+    "admin.dashboard.empty": "No reports in this category.",
+
+    // Report location step
+    "report.location.or": "or",
+    "report.location.mapHint": "Tap anywhere on the map to drop a pin",
+    "report.location.gpsError": "Permission denied — try the map or dropdown below.",
+    "report.back": "Back",
+    "report.next": "Next",
 
     // Footer
     "footer.mission":
@@ -197,6 +215,13 @@ export const translations = {
     "map.confirm": "আমারও এমন হয়েছে",
     "map.confirmed": "নিশ্চিত হয়েছে",
     "map.reportCount": "রিপোর্ট",
+    "map.filters.clear": "সব মুছুন",
+    "map.legend.title": "তীব্রতা",
+    "map.legend.low": "কম",
+    "map.legend.moderate": "মাঝারি",
+    "map.legend.high": "উচ্চ",
+    "map.legend.pulseHint": "স্পন্দন = উচ্চ তীব্রতা",
+    "map.thanksConfirm": "ধন্যবাদ",
 
     "admin.login.title": "অ্যাডমিন লগইন",
     "admin.login.password": "পাসওয়ার্ড",
@@ -205,9 +230,19 @@ export const translations = {
     "admin.dashboard.title": "মডারেশন ড্যাশবোর্ড",
     "admin.dashboard.flagged": "চিহ্নিত",
     "admin.dashboard.published": "প্রকাশিত",
+    "admin.dashboard.hidden": "লুকানো",
+    "admin.dashboard.removed": "মুছে ফেলা",
     "admin.dashboard.approve": "অনুমোদন",
     "admin.dashboard.hide": "লুকান",
     "admin.dashboard.remove": "মুছুন",
+    "admin.dashboard.logout": "লগ আউট",
+    "admin.dashboard.empty": "এই বিভাগে কোনো রিপোর্ট নেই।",
+
+    "report.location.or": "অথবা",
+    "report.location.mapHint": "একটি পিন রাখতে মানচিত্রের যেকোনো স্থানে ট্যাপ করুন",
+    "report.location.gpsError": "অনুমতি প্রত্যাখ্যান করা হয়েছে — নিচের মানচিত্র বা ড্রপডাউন চেষ্টা করুন।",
+    "report.back": "পেছনে",
+    "report.next": "পরবর্তী",
 
     "footer.mission":
       "ঢাকায় চলাচলকারী নারীদের জন্য একটি অলাভজনক, ক্রাউডসোর্সড নিরাপত্তা সম্পদ।",

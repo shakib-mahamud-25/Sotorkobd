@@ -3,6 +3,7 @@
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useState } from "react";
 import L from "leaflet";
+import { useI18n } from "@/lib/i18n/context";
 
 // Fix default marker icon paths (Leaflet's default assets don't resolve
 // correctly under Next.js bundling without this).
@@ -38,6 +39,8 @@ export function LocationPickerMap({
   value: { lat: number; lng: number } | null;
   onChange: (lat: number, lng: number) => void;
 }) {
+  const { t } = useI18n();
+  const mapHintText = t("report.location.mapHint");
   const [position, setPosition] = useState<[number, number] | null>(
     value ? [value.lat, value.lng] : null
   );
@@ -48,7 +51,7 @@ export function LocationPickerMap({
   }
 
   return (
-    <div className="h-72 w-full overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-xs)]">
+    <div className="relative h-72 w-full overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-xs)]">
       <MapContainer
         center={position ?? DHAKA_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -62,6 +65,13 @@ export function LocationPickerMap({
         <ClickHandler onPick={handlePick} />
         {position && <Marker position={position} icon={markerIcon} />}
       </MapContainer>
+      {!position && (
+        <div className="pointer-events-none absolute inset-x-0 top-3 z-[500] flex justify-center px-4">
+          <div className="animate-fade-in-up rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/95 px-3.5 py-1.5 text-xs font-medium text-[var(--color-text-secondary)] shadow-[var(--shadow-sm)] backdrop-blur-sm">
+            {mapHintText}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

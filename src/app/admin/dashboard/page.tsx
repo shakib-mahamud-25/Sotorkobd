@@ -70,8 +70,8 @@ export default function AdminDashboardPage() {
   const tabs: { key: TabKey; label: string }[] = [
     { key: "flagged", label: t("admin.dashboard.flagged") },
     { key: "published", label: t("admin.dashboard.published") },
-    { key: "hidden", label: "Hidden" },
-    { key: "removed", label: "Removed" },
+    { key: "hidden", label: t("admin.dashboard.hidden") },
+    { key: "removed", label: t("admin.dashboard.removed") },
   ];
 
   return (
@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
           className="flex items-center gap-1.5 rounded-full border border-[var(--color-border-strong)] px-3.5 py-1.5 text-xs font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
         >
           <LogOut size={13} />
-          Log out
+          {t("admin.dashboard.logout")}
         </button>
       </div>
 
@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
             <Inbox size={20} />
           </div>
           <p className="mt-4 text-sm text-[var(--color-text-secondary)]">
-            No reports in this category.
+            {t("admin.dashboard.empty")}
           </p>
         </div>
       )}

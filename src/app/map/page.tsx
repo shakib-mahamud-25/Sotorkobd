@@ -77,9 +77,9 @@ export default function MapPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-73px)] flex-col md:flex-row">
+    <div className="flex min-h-[560px] flex-1 flex-col md:flex-row">
       {/* Desktop sidebar */}
-      <aside className="hidden w-80 flex-none overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:block">
+      <aside className="hidden w-80 min-h-0 flex-none overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:block">
         <h1 className="text-display-sm mb-6 text-[var(--color-primary)]">
           {t("map.title")}
         </h1>
@@ -142,7 +142,7 @@ export default function MapPage() {
       </div>
 
       {/* Map */}
-      <div className="relative flex-1">
+      <div className="relative min-h-[420px] flex-1">
         {loading && (
           <div className="animate-fade-in absolute inset-x-0 top-3 z-[500] flex justify-center">
             <div className="flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-1.5 text-xs font-medium text-white shadow-[var(--shadow-md)]">
