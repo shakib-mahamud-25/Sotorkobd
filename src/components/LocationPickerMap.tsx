@@ -48,7 +48,7 @@ export function LocationPickerMap({
   }
 
   return (
-    <div className="h-72 w-full overflow-hidden rounded-xl border border-line">
+    <div className="h-72 w-full overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-xs)]">
       <MapContainer
         center={position ?? DHAKA_CENTER}
         zoom={DEFAULT_ZOOM}

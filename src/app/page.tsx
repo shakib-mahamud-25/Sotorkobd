@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n/context";
 import { StatsStrip } from "@/components/StatsStrip";
+import { Card } from "@/components/ui/Card";
 import { MapPin, PenLine, Eye, ArrowRight } from "lucide-react";
 
 export default function HomePage() {
@@ -11,39 +12,54 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-line bg-ink">
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-primary)]">
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
               "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
             backgroundSize: "28px 28px",
           }}
         />
-        <div className="relative mx-auto max-w-6xl px-5 py-20 sm:py-28">
+        {/* Soft ambient glow — quiet, not flashy */}
+        <div
+          className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full opacity-20 blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--color-accent), transparent 70%)" }}
+        />
+
+        <div className="relative mx-auto max-w-6xl px-5 py-24 sm:py-32">
           <div className="max-w-2xl">
-            <span className="inline-block rounded-full border border-white/20 px-3 py-1 text-xs font-medium tracking-wide text-white/70">
+            <span className="animate-fade-in-up inline-block rounded-full border border-white/15 px-3 py-1 text-xs font-medium tracking-wide text-white/65">
               ঢাকা · Dhaka
             </span>
-            <h1 className="font-display mt-5 text-4xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-6xl">
+            <h1
+              className="text-display-lg animate-fade-in-up mt-6 text-white"
+              style={{ animationDelay: "80ms" }}
+            >
               {t("home.title")}
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
+            <p
+              className="animate-fade-in-up mt-6 max-w-xl text-lg leading-relaxed text-white/70"
+              style={{ animationDelay: "160ms" }}
+            >
               {t("home.subtitle")}
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div
+              className="animate-fade-in-up mt-10 flex flex-col gap-3 sm:flex-row"
+              style={{ animationDelay: "240ms" }}
+            >
               <Link
                 href="/map"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.02]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[var(--color-primary)] transition-all duration-[var(--duration-base)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-lg)] active:scale-[0.98]"
               >
-                <Eye size={18} />
+                <Eye size={18} className="transition-transform group-hover:scale-110" />
                 {t("home.cta.map")}
               </Link>
               <Link
                 href="/report"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-amber px-6 py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3.5 text-sm font-semibold text-white transition-all duration-[var(--duration-base)] ease-[var(--ease-out)] hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-lg)] active:scale-[0.98]"
               >
-                <PenLine size={18} />
+                <PenLine size={18} className="transition-transform group-hover:scale-110" />
                 {t("home.cta.report")}
               </Link>
             </div>
@@ -52,8 +68,8 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="mx-auto max-w-6xl px-5 py-14">
-        <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-text-soft">
+      <section className="mx-auto max-w-6xl px-5 py-16">
+        <h2 className="text-label text-[var(--color-text-muted)]">
           {t("home.stats.title")}
         </h2>
         <div className="mt-5">
@@ -62,50 +78,61 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section className="border-t border-line bg-paper-raised">
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
+      <section className="border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+        <div className="mx-auto max-w-6xl px-5 py-20">
+          <h2 className="text-display-sm text-[var(--color-primary)]">
             {t("home.howItWorks")}
           </h2>
-          <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
             <Step
-              icon={<MapPin size={22} />}
+              icon={<MapPin size={20} />}
+              step="01"
               title={t("home.step1.title")}
               body={t("home.step1.body")}
+              delay={0}
             />
             <Step
-              icon={<PenLine size={22} />}
+              icon={<PenLine size={20} />}
+              step="02"
               title={t("home.step2.title")}
               body={t("home.step2.body")}
+              delay={90}
             />
             <Step
-              icon={<Eye size={22} />}
+              icon={<Eye size={20} />}
+              step="03"
               title={t("home.step3.title")}
               body={t("home.step3.body")}
+              delay={180}
             />
           </div>
         </div>
       </section>
 
       {/* Bottom CTA */}
-      <section className="mx-auto max-w-6xl px-5 py-16">
-        <Link
-          href="/map"
-          className="group flex items-center justify-between rounded-2xl border border-line bg-paper-raised px-8 py-8 transition-colors hover:border-ink"
+      <section className="mx-auto max-w-6xl px-5 py-20">
+        <Card
+          interactive
+          padding="lg"
+          className="group flex items-center justify-between"
         >
-          <div>
-            <div className="font-display text-xl font-semibold text-ink">
-              {t("map.title")}
+          <Link href="/map" className="flex w-full items-center justify-between">
+            <div>
+              <div className="text-heading text-[var(--color-primary)]">
+                {t("map.title")}
+              </div>
+              <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                {t("home.cta.map")}
+              </div>
             </div>
-            <div className="mt-1 text-sm text-text-soft">
-              {t("home.cta.map")}
-            </div>
-          </div>
-          <ArrowRight
-            size={22}
-            className="text-ink transition-transform group-hover:translate-x-1"
-          />
-        </Link>
+            <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[var(--color-surface-sunken)] text-[var(--color-primary)] transition-all duration-[var(--duration-base)] ease-[var(--ease-out)] group-hover:bg-[var(--color-primary)] group-hover:text-white">
+              <ArrowRight
+                size={18}
+                className="transition-transform duration-[var(--duration-base)] group-hover:translate-x-0.5"
+              />
+            </span>
+          </Link>
+        </Card>
       </section>
     </div>
   );
@@ -113,22 +140,31 @@ export default function HomePage() {
 
 function Step({
   icon,
+  step,
   title,
   body,
+  delay,
 }: {
   icon: React.ReactNode;
+  step: string;
   title: string;
   body: string;
+  delay: number;
 }) {
   return (
-    <div>
-      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-ink text-white">
-        {icon}
+    <div className="animate-fade-in-up" style={{ animationDelay: `${delay}ms` }}>
+      <div className="flex items-center gap-3">
+        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-[var(--color-primary)] text-white">
+          {icon}
+        </div>
+        <span className="text-xs font-semibold tracking-widest text-[var(--color-text-muted)]">
+          {step}
+        </span>
       </div>
-      <h3 className="font-display mt-4 text-lg font-semibold text-ink">
-        {title}
-      </h3>
-      <p className="mt-2 text-sm leading-relaxed text-text-soft">{body}</p>
+      <h3 className="text-heading mt-4 text-[var(--color-primary)]">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+        {body}
+      </p>
     </div>
   );
 }

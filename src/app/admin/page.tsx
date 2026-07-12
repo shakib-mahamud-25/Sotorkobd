@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n/context";
-import { Lock, Loader2 } from "lucide-react";
+import { Lock } from "lucide-react";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 
 export default function AdminLoginPage() {
   const { t } = useI18n();
@@ -32,31 +35,33 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-sm flex-col items-center px-5 py-24">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-ink text-white">
-        <Lock size={20} />
+    <div className="mx-auto flex max-w-sm flex-col items-center px-5 py-24 sm:py-32">
+      <div className="animate-fade-in-up flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-[var(--shadow-md)]">
+        <Lock size={22} />
       </div>
-      <h1 className="font-display mt-5 text-xl font-semibold text-ink">
+      <h1
+        className="text-display-sm animate-fade-in-up mt-6 text-[var(--color-primary)]"
+        style={{ animationDelay: "60ms" }}
+      >
         {t("admin.login.title")}
       </h1>
-      <form onSubmit={handleSubmit} className="mt-6 w-full space-y-4">
-        <input
+      <form
+        onSubmit={handleSubmit}
+        className="animate-fade-in-up mt-8 w-full space-y-4"
+        style={{ animationDelay: "120ms" }}
+      >
+        <Input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder={t("admin.login.password")}
-          className="w-full rounded-xl border border-line bg-paper-raised px-4 py-3 text-sm focus:border-ink"
           autoFocus
+          error={!!error}
         />
-        {error && <p className="text-xs text-brick">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
-        >
-          {loading && <Loader2 size={16} className="animate-spin" />}
+        {error && <Alert tone="danger">{error}</Alert>}
+        <Button type="submit" variant="primary" size="lg" fullWidth loading={loading}>
           {t("admin.login.submit")}
-        </button>
+        </Button>
       </form>
     </div>
   );

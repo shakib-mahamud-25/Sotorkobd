@@ -5,11 +5,16 @@ import dynamic from "next/dynamic";
 import { FilterPanel } from "@/components/FilterPanel";
 import { useI18n } from "@/lib/i18n/context";
 import type { MapFilters, Report } from "@/types";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, MapPinOff, Loader2 } from "lucide-react";
 
 const SafetyMap = dynamic(
   () => import("@/components/SafetyMap").then((m) => m.SafetyMap),
-  { ssr: false, loading: () => <div className="h-full w-full animate-pulse bg-paper" /> }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="skeleton h-full w-full rounded-none" />
+    ),
+  }
 );
 
 const DEFAULT_FILTERS: MapFilters = {
@@ -50,6 +55,14 @@ export default function MapPage() {
     fetchReports();
   }, [fetchReports]);
 
+  // Lock body scroll while the mobile drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileFiltersOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFiltersOpen]);
+
   async function handleConfirm(reportId: string) {
     await fetch("/api/reports/confirm", {
       method: "POST",
@@ -66,8 +79,8 @@ export default function MapPage() {
   return (
     <div className="flex h-[calc(100vh-73px)] flex-col md:flex-row">
       {/* Desktop sidebar */}
-      <aside className="hidden w-80 flex-none overflow-y-auto border-r border-line bg-paper-raised p-6 md:block">
-        <h1 className="font-display mb-5 text-xl font-semibold text-ink">
+      <aside className="hidden w-80 flex-none overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:block">
+        <h1 className="text-display-sm mb-6 text-[var(--color-primary)]">
           {t("map.title")}
         </h1>
         <FilterPanel
@@ -80,11 +93,11 @@ export default function MapPage() {
       </aside>
 
       {/* Mobile filter toggle */}
-      <div className="flex items-center justify-between border-b border-line bg-paper-raised px-5 py-3 md:hidden">
-        <h1 className="font-display text-lg font-semibold text-ink">{t("map.title")}</h1>
+      <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-3 md:hidden">
+        <h1 className="text-heading text-[var(--color-primary)]">{t("map.title")}</h1>
         <button
           onClick={() => setMobileFiltersOpen(true)}
-          className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold"
+          className="flex items-center gap-1.5 rounded-full border border-[var(--color-border-strong)] px-3 py-1.5 text-xs font-semibold text-[var(--color-primary)] transition-colors active:scale-95"
         >
           <SlidersHorizontal size={14} />
           {t("map.filters")}
@@ -92,43 +105,56 @@ export default function MapPage() {
       </div>
 
       {/* Mobile filter drawer */}
-      {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-[1000] bg-black/40 md:hidden" onClick={() => setMobileFiltersOpen(false)}>
-          <div
-            className="absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-paper-raised p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="font-display text-lg font-semibold text-ink">
-                {t("map.filters")}
-              </h2>
-              <button onClick={() => setMobileFiltersOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
-            <FilterPanel
-              filters={filters}
-              onChange={setFilters}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-              resultCount={reports.length}
-            />
+      <div
+        className={`fixed inset-0 z-[1000] transition-opacity duration-[var(--duration-base)] md:hidden ${
+          mobileFiltersOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-[var(--color-overlay)]"
+          onClick={() => setMobileFiltersOpen(false)}
+        />
+        <div
+          className={`absolute right-0 top-0 h-full w-[85%] max-w-sm overflow-y-auto bg-[var(--color-surface)] p-6 shadow-[var(--shadow-lg)] transition-transform duration-[var(--duration-slow)] ease-[var(--ease-out)] ${
+            mobileFiltersOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-heading text-[var(--color-primary)]">
+              {t("map.filters")}
+            </h2>
+            <button
+              onClick={() => setMobileFiltersOpen(false)}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-text-secondary)] hover:bg-[var(--color-hover-tint)]"
+              aria-label="Close filters"
+            >
+              <X size={18} />
+            </button>
           </div>
+          <FilterPanel
+            filters={filters}
+            onChange={setFilters}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            resultCount={reports.length}
+          />
         </div>
-      )}
+      </div>
 
       {/* Map */}
       <div className="relative flex-1">
         {loading && (
-          <div className="absolute inset-x-0 top-0 z-[500] flex justify-center pt-3">
-            <div className="rounded-full bg-ink px-4 py-1.5 text-xs font-medium text-white">
-              Loading…
+          <div className="animate-fade-in absolute inset-x-0 top-3 z-[500] flex justify-center">
+            <div className="flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-1.5 text-xs font-medium text-white shadow-[var(--shadow-md)]">
+              <Loader2 size={12} className="animate-spin" />
+              Loading
             </div>
           </div>
         )}
         {!loading && reports.length === 0 && (
-          <div className="absolute inset-x-0 top-0 z-[500] flex justify-center pt-3">
-            <div className="rounded-full bg-paper-raised px-4 py-1.5 text-xs font-medium text-text-soft shadow">
+          <div className="animate-fade-in-up absolute inset-x-0 top-3 z-[500] flex justify-center px-4">
+            <div className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-xs font-medium text-[var(--color-text-secondary)] shadow-[var(--shadow-md)]">
+              <MapPinOff size={14} className="text-[var(--color-text-muted)]" />
               {t("map.noResults")}
             </div>
           </div>

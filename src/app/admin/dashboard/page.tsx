@@ -5,7 +5,17 @@ import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n/context";
 import { getCategoryLabel } from "@/lib/categories";
 import type { Report, ReportMedia } from "@/types";
-import { LogOut, Check, EyeOff, Trash2, ImageIcon, AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
+import {
+  LogOut,
+  Check,
+  EyeOff,
+  Trash2,
+  AlertTriangle,
+  Inbox,
+} from "lucide-react";
 
 type TabKey = "flagged" | "published" | "hidden" | "removed";
 
@@ -17,6 +27,7 @@ export default function AdminDashboardPage() {
   const [media, setMedia] = useState<ReportMedia[]>([]);
   const [loading, setLoading] = useState(true);
   const [unauthorized, setUnauthorized] = useState(false);
+  const [actioningId, setActioningId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -41,12 +52,14 @@ export default function AdminDashboardPage() {
   }, [unauthorized, router]);
 
   async function updateStatus(id: string, status: TabKey) {
+    setActioningId(id);
     await fetch(`/api/admin/reports/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
     setReports((prev) => prev.filter((r) => r.id !== id));
+    setActioningId(null);
   }
 
   async function handleLogout() {
@@ -62,136 +75,169 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-4xl px-5 py-10">
+    <div className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="font-display text-2xl font-semibold text-ink">
+        <h1 className="text-display-sm text-[var(--color-primary)]">
           {t("admin.dashboard.title")}
         </h1>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-semibold text-text-soft hover:text-ink"
+          className="flex items-center gap-1.5 rounded-full border border-[var(--color-border-strong)] px-3.5 py-1.5 text-xs font-semibold text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
         >
-          <LogOut size={14} />
+          <LogOut size={13} />
           Log out
         </button>
       </div>
 
-      <div className="mb-6 flex gap-2 border-b border-line">
+      <div className="mb-6 flex gap-1 border-b border-[var(--color-border)]">
         {tabs.map((tb) => (
           <button
             key={tb.key}
             onClick={() => setTab(tb.key)}
-            className={`border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+            className={`relative px-4 py-2.5 text-sm font-medium transition-colors duration-[var(--duration-base)] ${
               tab === tb.key
-                ? "border-ink text-ink"
-                : "border-transparent text-text-soft hover:text-ink"
+                ? "text-[var(--color-primary)]"
+                : "text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]"
             }`}
           >
             {tb.label}
+            {tab === tb.key && (
+              <span className="absolute inset-x-0 -bottom-[1px] h-[2px] rounded-full bg-[var(--color-primary)]" />
+            )}
           </button>
         ))}
       </div>
 
-      {loading && <p className="text-sm text-text-soft">Loading…</p>}
+      {loading && (
+        <div className="space-y-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} padding="md">
+              <div className="flex gap-4">
+                <div className="flex-1 space-y-3">
+                  <div className="flex gap-2">
+                    <Skeleton className="h-5 w-32" />
+                    <Skeleton className="h-5 w-16" />
+                  </div>
+                  <SkeletonText lines={2} />
+                </div>
+                <div className="flex flex-none flex-col gap-1.5">
+                  <Skeleton className="h-7 w-20" />
+                  <Skeleton className="h-7 w-20" />
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
       {!loading && reports.length === 0 && (
-        <p className="text-sm text-text-soft">No reports in this category.</p>
+        <div className="animate-fade-in-up flex flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border-strong)] py-16 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface-sunken)] text-[var(--color-text-muted)]">
+            <Inbox size={20} />
+          </div>
+          <p className="mt-4 text-sm text-[var(--color-text-secondary)]">
+            No reports in this category.
+          </p>
+        </div>
       )}
 
       <div className="space-y-3">
-        {reports.map((report) => {
-          const reportMedia = media.filter((m) => m.report_id === report.id);
-          return (
-            <div
-              key={report.id}
-              className="rounded-xl border border-line bg-paper-raised p-5"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-ink">
-                      {getCategoryLabel(report.category_id, locale)}
-                    </span>
-                    <span className="rounded-full bg-paper px-2 py-0.5 text-[10px] font-medium text-text-soft">
-                      Severity {report.severity}
-                    </span>
-                    {report.is_seed && (
-                      <span className="rounded-full bg-amber/15 px-2 py-0.5 text-[10px] font-medium text-amber">
-                        Seed data
+        {!loading &&
+          reports.map((report, i) => {
+            const reportMedia = media.filter((m) => m.report_id === report.id);
+            const isActioning = actioningId === report.id;
+            return (
+              <Card
+                key={report.id}
+                padding="md"
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${Math.min(i, 6) * 40}ms` }}
+              >
+                <div className={`flex items-start justify-between gap-4 transition-opacity duration-[var(--duration-base)] ${isActioning ? "opacity-40" : ""}`}>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-sm font-semibold text-[var(--color-primary)]">
+                        {getCategoryLabel(report.category_id, locale)}
                       </span>
-                    )}
-                    {report.flag_reason && (
-                      <span className="flex items-center gap-1 rounded-full bg-brick/10 px-2 py-0.5 text-[10px] font-medium text-brick">
-                        <AlertTriangle size={10} />
-                        {report.flag_reason}
-                      </span>
-                    )}
-                  </div>
-                  {report.area_name && (
-                    <div className="mt-1 text-xs text-text-soft">{report.area_name}</div>
-                  )}
-                  {report.description && (
-                    <p className="mt-2 text-sm leading-relaxed text-text">
-                      {report.description}
-                    </p>
-                  )}
-                  {reportMedia.length > 0 && (
-                    <div className="mt-3 flex gap-2">
-                      {reportMedia.map((m) => (
-                        <a
-                          key={m.id}
-                          href={m.cloudinary_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border border-line"
-                        >
-                          <img
-                            src={m.cloudinary_url}
-                            alt=""
-                            className="h-full w-full object-cover"
-                          />
-                        </a>
-                      ))}
+                      <Badge tone="neutral">Severity {report.severity}</Badge>
+                      {report.is_seed && <Badge tone="accent">Seed data</Badge>}
+                      {report.flag_reason && (
+                        <Badge tone="danger" icon={<AlertTriangle size={10} />}>
+                          {report.flag_reason}
+                        </Badge>
+                      )}
                     </div>
-                  )}
-                  <div className="mt-2 text-[10px] text-text-soft">
-                    {new Date(report.created_at).toLocaleString()} · fingerprint:{" "}
-                    {report.submitter_fingerprint?.slice(0, 10) ?? "—"}…
+                    {report.area_name && (
+                      <div className="mt-1.5 text-xs text-[var(--color-text-muted)]">
+                        {report.area_name}
+                      </div>
+                    )}
+                    {report.description && (
+                      <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-primary)]">
+                        {report.description}
+                      </p>
+                    )}
+                    {reportMedia.length > 0 && (
+                      <div className="mt-3 flex gap-2">
+                        {reportMedia.map((m) => (
+                          <a
+                            key={m.id}
+                            href={m.cloudinary_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] transition-transform hover:scale-105"
+                          >
+                            <img
+                              src={m.cloudinary_url}
+                              alt=""
+                              className="h-full w-full object-cover"
+                            />
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-2.5 text-[10px] text-[var(--color-text-muted)]">
+                      {new Date(report.created_at).toLocaleString()} · fingerprint:{" "}
+                      {report.submitter_fingerprint?.slice(0, 10) ?? "—"}…
+                    </div>
+                  </div>
+
+                  <div className="flex flex-none flex-col gap-1.5">
+                    {tab !== "published" && (
+                      <button
+                        onClick={() => updateStatus(report.id, "published")}
+                        disabled={isActioning}
+                        className="flex items-center gap-1.5 rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-[11px] font-semibold text-white transition-all duration-[var(--duration-base)] hover:bg-[var(--color-primary-hover)] active:scale-95 disabled:opacity-50"
+                      >
+                        <Check size={12} />
+                        {t("admin.dashboard.approve")}
+                      </button>
+                    )}
+                    {tab !== "hidden" && (
+                      <button
+                        onClick={() => updateStatus(report.id, "hidden")}
+                        disabled={isActioning}
+                        className="flex items-center gap-1.5 rounded-full border border-[var(--color-border-strong)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-text-secondary)] transition-all duration-[var(--duration-base)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] active:scale-95 disabled:opacity-50"
+                      >
+                        <EyeOff size={12} />
+                        {t("admin.dashboard.hide")}
+                      </button>
+                    )}
+                    {tab !== "removed" && (
+                      <button
+                        onClick={() => updateStatus(report.id, "removed")}
+                        disabled={isActioning}
+                        className="flex items-center gap-1.5 rounded-full border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-1.5 text-[11px] font-semibold text-[var(--color-danger)] transition-all duration-[var(--duration-base)] hover:bg-[var(--color-danger)] hover:text-white active:scale-95 disabled:opacity-50"
+                      >
+                        <Trash2 size={12} />
+                        {t("admin.dashboard.remove")}
+                      </button>
+                    )}
                   </div>
                 </div>
-
-                <div className="flex flex-none flex-col gap-1.5">
-                  {tab !== "published" && (
-                    <button
-                      onClick={() => updateStatus(report.id, "published")}
-                      className="flex items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-[11px] font-semibold text-white"
-                    >
-                      <Check size={12} />
-                      {t("admin.dashboard.approve")}
-                    </button>
-                  )}
-                  {tab !== "hidden" && (
-                    <button
-                      onClick={() => updateStatus(report.id, "hidden")}
-                      className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[11px] font-semibold text-text-soft"
-                    >
-                      <EyeOff size={12} />
-                      {t("admin.dashboard.hide")}
-                    </button>
-                  )}
-                  {tab !== "removed" && (
-                    <button
-                      onClick={() => updateStatus(report.id, "removed")}
-                      className="flex items-center gap-1.5 rounded-full border border-brick/30 px-3 py-1.5 text-[11px] font-semibold text-brick"
-                    >
-                      <Trash2 size={12} />
-                      {t("admin.dashboard.remove")}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              </Card>
+            );
+          })}
       </div>
     </div>
   );

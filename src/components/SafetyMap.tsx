@@ -12,14 +12,34 @@ const DHAKA_CENTER: [number, number] = [23.7808, 90.4];
 function createSeverityIcon(severity: number): L.DivIcon {
   const color = getSeverityColor(severity);
   const size = 14 + severity * 2;
+  const pulse = severity >= 4;
   return L.divIcon({
     className: "",
-    html: `<div style="
-      width:${size}px;height:${size}px;border-radius:50%;
-      background:${color};opacity:0.85;
-      box-shadow:0 0 0 4px ${color}33, 0 2px 6px rgba(0,0,0,0.25);
-      border:2px solid white;
-    "></div>`,
+    html: `
+      <div style="position:relative;width:${size}px;height:${size}px;">
+        ${
+          pulse
+            ? `<div style="
+                position:absolute;inset:-6px;border-radius:50%;
+                background:${color};opacity:0.25;
+                animation:sotorko-pulse 2.2s ease-out infinite;
+              "></div>`
+            : ""
+        }
+        <div style="
+          position:relative;width:100%;height:100%;border-radius:50%;
+          background:${color};opacity:0.92;
+          box-shadow:0 0 0 4px ${color}26, 0 2px 6px rgba(15,42,61,0.28);
+          border:2px solid white;
+        "></div>
+      </div>
+      <style>
+        @keyframes sotorko-pulse {
+          0% { transform: scale(0.6); opacity: 0.35; }
+          100% { transform: scale(1.6); opacity: 0; }
+        }
+      </style>
+    `,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
@@ -118,26 +138,34 @@ export function SafetyMap({
             position={[report.latitude, report.longitude]}
             icon={createSeverityIcon(report.severity)}
           >
-            <Popup>
-              <div className="min-w-[200px] space-y-2">
-                <div className="text-sm font-semibold text-ink">
-                  {getCategoryLabel(report.category_id, locale)}
+            <Popup minWidth={220} maxWidth={280}>
+              <div className="space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="h-2 w-2 flex-none rounded-full"
+                    style={{ backgroundColor: getSeverityColor(report.severity) }}
+                  />
+                  <div className="text-sm font-semibold text-[var(--color-primary)]">
+                    {getCategoryLabel(report.category_id, locale)}
+                  </div>
                 </div>
                 {report.area_name && (
-                  <div className="text-xs text-text-soft">{report.area_name}</div>
+                  <div className="text-xs text-[var(--color-text-muted)]">
+                    {report.area_name}
+                  </div>
                 )}
                 {report.description && (
-                  <p className="text-xs leading-relaxed text-text">
+                  <p className="text-xs leading-relaxed text-[var(--color-text-secondary)]">
                     {report.description}
                   </p>
                 )}
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-[10px] text-text-soft">
+                <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-2.5">
+                  <span className="text-[10px] text-[var(--color-text-muted)]">
                     {new Date(report.created_at).toLocaleDateString()}
                   </span>
                   <button
                     onClick={() => onConfirm(report.id)}
-                    className="rounded-full bg-ink px-2.5 py-1 text-[10px] font-semibold text-white"
+                    className="rounded-full bg-[var(--color-primary)] px-2.5 py-1 text-[10px] font-semibold text-white transition-all duration-[var(--duration-base)] hover:bg-[var(--color-primary-hover)] active:scale-95"
                   >
                     {t("map.confirm")} ({report.confirm_count})
                   </button>

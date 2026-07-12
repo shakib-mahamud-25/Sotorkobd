@@ -1,58 +1,296 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
-  /* Sotorko design tokens */
-  --color-ink: #0f2a3d;         /* deep teal-navy — primary/trust */
-  --color-ink-mid: #1d4e5f;     /* mid teal — secondary */
-  --color-paper: #f7f4ee;       /* warm off-white background */
-  --color-paper-raised: #ffffff;
-  --color-amber: #c9793e;       /* warm amber — sparing alert accent */
-  --color-brick: #8a2e2e;       /* muted brick red — high severity only */
-  --color-text: #2b3a3f;        /* body text on light */
-  --color-text-soft: #5c6b6e;
-  --color-line: #e2ddd0;        /* hairline borders */
+  /* ============================================================
+     PRIMITIVE PALETTE — raw values. Semantic tokens below reference
+     these; components should reference semantic tokens, not these.
+     ============================================================ */
+  --p-ink-900: #0a1f2e;
+  --p-ink-800: #0f2a3d;
+  --p-ink-700: #1d4e5f;
+  --p-ink-600: #2c6377;
+  --p-ink-100: #e4edf0;
+  --p-ink-50: #f0f5f6;
 
+  --p-paper-100: #f7f4ee;
+  --p-paper-0: #ffffff;
+
+  --p-amber-700: #a35f2c;
+  --p-amber-600: #c9793e;
+  --p-amber-100: #f3e1cf;
+  --p-amber-50: #faf1e7;
+
+  --p-brick-700: #6f2323;
+  --p-brick-600: #8a2e2e;
+  --p-brick-100: #f0dcdc;
+  --p-brick-50: #f8ecec;
+
+  --p-teal-700: #1a5c47;
+  --p-teal-600: #2f7a5f;
+  --p-teal-100: #dcece4;
+  --p-teal-50: #eef6f2;
+
+  --p-sand-900: #2b3a3f;
+  --p-sand-600: #5c6b6e;
+  --p-sand-450: #657072;
+  --p-sand-400: #8a9598;
+  --p-sand-200: #cfd6d3;
+  --p-sand-100: #e2ddd0;
+  --p-sand-50: #eeece4;
+
+  /* ============================================================
+     SEMANTIC TOKENS — components reference these
+     ============================================================ */
+
+  /* Surfaces */
+  --color-bg: var(--p-paper-100);
+  --color-surface: var(--p-paper-0);
+  --color-surface-sunken: var(--p-sand-50);
+  --color-overlay: rgba(10, 31, 46, 0.48);
+
+  /* Brand */
+  --color-primary: var(--p-ink-800);
+  --color-primary-hover: var(--p-ink-900);
+  --color-primary-active: var(--p-ink-900);
+  --color-secondary: var(--p-ink-700);
+
+  /* Text */
+  --color-text-primary: var(--p-sand-900);
+  --color-text-secondary: var(--p-sand-600);
+  --color-text-muted: var(--p-sand-450);
+  --color-text-on-primary: var(--p-paper-0);
+  --color-text-link: var(--p-ink-700);
+
+  /* Borders */
+  --color-border: var(--p-sand-100);
+  --color-border-strong: var(--p-sand-200);
+  --color-border-focus: var(--p-ink-800);
+
+  /* Semantic states */
+  --color-success: var(--p-teal-600);
+  --color-success-bg: var(--p-teal-50);
+  --color-success-border: var(--p-teal-100);
+
+  --color-warning: var(--p-amber-600);
+  --color-warning-bg: var(--p-amber-50);
+  --color-warning-border: var(--p-amber-100);
+
+  --color-danger: var(--p-brick-600);
+  --color-danger-hover: var(--p-brick-700);
+  --color-danger-bg: var(--p-brick-50);
+  --color-danger-border: var(--p-brick-100);
+
+  --color-info: var(--p-ink-600);
+  --color-info-bg: var(--p-ink-50);
+  --color-info-border: var(--p-ink-100);
+
+  --color-accent: var(--p-amber-700);
+  --color-accent-hover: #8a4a22;
+
+  /* Interaction */
+  --color-hover-tint: rgba(15, 42, 61, 0.04);
+  --color-selected-bg: var(--p-ink-800);
+  --color-selected-text: var(--p-paper-0);
+  --color-disabled-bg: var(--p-sand-50);
+  --color-disabled-text: var(--p-sand-400);
+
+  /* Severity scale (product-specific semantic mapping) */
+  --color-severity-low: var(--p-ink-700);
+  --color-severity-mid: var(--p-amber-600);
+  --color-severity-high: var(--p-brick-600);
+
+  /* Fonts */
   --font-display: "Fraunces", "Noto Serif Bengali", serif;
   --font-body: "Inter", "Noto Sans Bengali", sans-serif;
+
+  /* ============================================================
+     SPACING SCALE (4px base unit)
+     ============================================================ */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ============================================================
+     RADIUS SCALE
+     ============================================================ */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 999px;
+
+  /* ============================================================
+     ELEVATION — soft, warm-tinted shadows (not neutral grey)
+     ============================================================ */
+  --shadow-xs: 0 1px 2px rgba(15, 42, 61, 0.06);
+  --shadow-sm: 0 2px 8px rgba(15, 42, 61, 0.07), 0 1px 2px rgba(15, 42, 61, 0.05);
+  --shadow-md: 0 8px 24px rgba(15, 42, 61, 0.10), 0 2px 6px rgba(15, 42, 61, 0.06);
+  --shadow-lg: 0 16px 48px rgba(15, 42, 61, 0.16), 0 4px 12px rgba(15, 42, 61, 0.08);
+  --shadow-focus-ring: 0 0 0 3px rgba(15, 42, 61, 0.18);
+
+  /* ============================================================
+     MOTION
+     ============================================================ */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
 }
 
 @theme inline {
-  --color-ink: var(--color-ink);
-  --color-ink-mid: var(--color-ink-mid);
-  --color-paper: var(--color-paper);
-  --color-paper-raised: var(--color-paper-raised);
-  --color-amber: var(--color-amber);
-  --color-brick: var(--color-brick);
-  --color-text: var(--color-text);
-  --color-text-soft: var(--color-text-soft);
-  --color-line: var(--color-line);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-sunken: var(--color-surface-sunken);
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-secondary: var(--color-secondary);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-on-primary: var(--color-text-on-primary);
+
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-success: var(--color-success);
+  --color-success-bg: var(--color-success-bg);
+  --color-warning: var(--color-warning);
+  --color-warning-bg: var(--color-warning-bg);
+  --color-danger: var(--color-danger);
+  --color-danger-bg: var(--color-danger-bg);
+  --color-info: var(--color-info);
+  --color-info-bg: var(--color-info-bg);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+
+  --color-selected-bg: var(--color-selected-bg);
+  --color-disabled-bg: var(--color-disabled-bg);
+  --color-disabled-text: var(--color-disabled-text);
+
+  /* Legacy aliases kept so existing components referencing the old
+     token names (ink / paper / amber / brick / line) keep working
+     while the codebase migrates screen-by-screen to semantic names. */
+  --color-ink: var(--color-primary);
+  --color-ink-mid: var(--color-secondary);
+  --color-paper: var(--color-bg);
+  --color-paper-raised: var(--color-surface);
+  --color-amber: var(--color-accent);
+  --color-brick: var(--color-danger);
+  --color-text: var(--color-text-primary);
+  --color-text-soft: var(--color-text-secondary);
+  --color-line: var(--color-border);
+
   --font-display: var(--font-display);
   --font-body: var(--font-body);
 }
 
 * {
-  border-color: var(--color-line);
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
 
-/* Focus visibility — accessibility floor, never remove */
+/* ============================================================
+   TYPE SCALE — utility classes for consistent hierarchy
+   ============================================================ */
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 2rem + 2.2vw, 4rem);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.7rem + 1.3vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.text-display-sm {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.text-heading {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.text-caption {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   ACCESSIBILITY — focus visibility, never remove
+   ============================================================ */
 :focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-border-focus);
   outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button, a, input, select, textarea {
+  transition: background-color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+/* Larger minimum touch targets on coarse-pointer (touch) devices */
+@media (pointer: coarse) {
+  button, a[role="button"] {
+    min-height: 44px;
+  }
 }
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -61,10 +299,40 @@ h1, h2, h3, .font-display {
   }
 }
 
-/* Leaflet map container fixes */
+/* ============================================================
+   SKELETON / LOADING
+   ============================================================ */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.9; }
+}
+.skeleton {
+  background: var(--color-surface-sunken);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in var(--duration-base) var(--ease-out) both;
+}
+
+/* ============================================================
+   LEAFLET MAP — visual integration with design system
+   ============================================================ */
 .leaflet-container {
   font-family: var(--font-body);
-  background: var(--color-paper);
+  background: var(--color-bg);
 }
 
 /* Custom muted "dusk" tile filter for calm, non-alarming map styling */
@@ -73,11 +341,47 @@ h1, h2, h3, .font-display {
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(15, 42, 61, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
 }
 
 .leaflet-popup-content {
   font-family: var(--font-body);
-  margin: 14px 16px;
+  margin: var(--space-4);
+}
+
+.leaflet-popup-tip {
+  box-shadow: var(--shadow-sm);
+}
+
+.leaflet-control-zoom {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm) !important;
+}
+.leaflet-control-zoom a {
+  color: var(--color-text-primary) !important;
+  background: var(--color-surface) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--color-surface-sunken) !important;
+}
+
+/* Custom scrollbar — subtle, on-brand */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--p-sand-200);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--p-sand-400);
 }

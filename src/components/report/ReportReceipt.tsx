@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n/context";
 import { Copy, Check, Download, MapPinned, ShieldAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 export function ReportReceipt({
   editCode,
@@ -15,6 +16,7 @@ export function ReportReceipt({
   const { t } = useI18n();
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+  void reportId;
 
   function handleCopy() {
     navigator.clipboard.writeText(editCode);
@@ -37,7 +39,7 @@ export function ReportReceipt({
     doc.setTextColor(220, 220, 220);
     doc.text("Report receipt", 30, 75);
 
-    doc.setDrawColor(255, 255, 255, 0.3);
+    doc.setDrawColor(255, 255, 255);
     doc.line(30, 95, 290, 95);
 
     doc.setFontSize(10);
@@ -65,37 +67,43 @@ export function ReportReceipt({
 
   return (
     <div className="mx-auto max-w-md space-y-6 text-center">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-ink text-white">
-        <Check size={26} />
+      <div
+        className="animate-fade-in-up mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-success)] text-white shadow-[var(--shadow-md)]"
+        style={{ animationDelay: "0ms" }}
+      >
+        <Check size={28} strokeWidth={2.5} />
       </div>
 
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-ink">
+      <div className="animate-fade-in-up" style={{ animationDelay: "80ms" }}>
+        <h1 className="text-display-sm text-[var(--color-primary)]">
           {t("receipt.title")}
         </h1>
-        <p className="mt-2 text-sm leading-relaxed text-text-soft">
+        <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
           {t("receipt.subtitle")}
         </p>
       </div>
 
-      <div className="rounded-2xl bg-ink px-6 py-8 text-white">
-        <div className="text-xs uppercase tracking-wide text-white/60">
+      <div
+        className="animate-fade-in-up rounded-[var(--radius-xl)] bg-[var(--color-primary)] px-6 py-8 text-white shadow-[var(--shadow-lg)]"
+        style={{ animationDelay: "160ms" }}
+      >
+        <div className="text-xs uppercase tracking-wide text-white/55">
           {t("receipt.codeLabel")}
         </div>
-        <div className="font-display mt-2 text-3xl font-semibold tracking-wider">
+        <div className="text-display-sm mt-2 tracking-wider text-white">
           {editCode}
         </div>
-        <div className="mt-5 flex justify-center gap-3">
+        <div className="mt-6 flex justify-center gap-3">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold transition-colors hover:bg-white/20"
+            className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold transition-all duration-[var(--duration-base)] hover:bg-white/20 active:scale-95"
           >
             {copied ? <Check size={14} /> : <Copy size={14} />}
             {copied ? t("receipt.copied") : t("receipt.copy")}
           </button>
           <button
             onClick={handleDownload}
-            className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold transition-colors hover:bg-white/20"
+            className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold transition-all duration-[var(--duration-base)] hover:bg-white/20 active:scale-95"
           >
             <Download size={14} />
             {t("receipt.download")}
@@ -103,25 +111,37 @@ export function ReportReceipt({
         </div>
       </div>
 
-      <div className="flex items-start gap-2.5 rounded-xl border border-amber/30 bg-amber/10 px-4 py-3 text-left">
-        <ShieldAlert size={18} className="mt-0.5 flex-none text-amber" />
-        <p className="text-xs leading-relaxed text-ink">{t("receipt.warning")}</p>
+      <div
+        className="animate-fade-in-up flex items-start gap-2.5 rounded-[var(--radius-lg)] border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] px-4 py-3.5 text-left"
+        style={{ animationDelay: "240ms" }}
+      >
+        <ShieldAlert size={18} className="mt-0.5 flex-none text-[var(--color-warning)]" />
+        <p className="text-xs leading-relaxed text-[var(--color-text-primary)]">
+          {t("receipt.warning")}
+        </p>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <button
+      <div
+        className="animate-fade-in-up flex flex-col gap-3 sm:flex-row"
+        style={{ animationDelay: "320ms" }}
+      >
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
           onClick={() => router.push("/map")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
         >
           <MapPinned size={16} />
           {t("receipt.viewOnMap")}
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          fullWidth
           onClick={() => router.push("/")}
-          className="flex-1 rounded-full border border-line px-5 py-3 text-sm font-semibold text-ink"
         >
           {t("receipt.done")}
-        </button>
+        </Button>
       </div>
     </div>
   );
