@@ -57,7 +57,7 @@ export default function InsightsPage() {
               not a labeled card. */}
           <div className="mt-10">
             <div className="text-display-lg text-[var(--color-primary)]">
-              {numberFormat(stats.realTotalReports)}
+              {numberFormat(stats.totalReports)}
             </div>
             <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
               {t("insights.headline.label")}
@@ -84,7 +84,7 @@ export default function InsightsPage() {
               <CategoryList
                 breakdown={stats.categoryBreakdown}
                 locale={locale}
-                total={stats.realTotalReports}
+                total={stats.totalReports}
               />
             </Section>
           )}
@@ -92,7 +92,7 @@ export default function InsightsPage() {
           {/* Where reports are recurring */}
           {stats.allAreas && stats.allAreas.length > 0 && (
             <Section title={t("insights.areas.title")}>
-              <AreaList areas={stats.allAreas} total={stats.realTotalReports} />
+              <AreaList areas={stats.allAreas} total={stats.totalReports} />
             </Section>
           )}
 
