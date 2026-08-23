@@ -28,6 +28,13 @@ export function StatsStrip() {
         // what's shown here is always a real community-report number, never
         // inflated by the ~25 illustrative reports seeded at launch.
         value={stats ? stats.realTotalReports.toLocaleString(locale === "bn" ? "bn-BD" : "en-US") : "0"}
+        // Fix: a bare "0" here next to a map that visibly has pins on it
+        // read as broken/confusing, even though both numbers were
+        // individually correct. This shows a small explanatory hint only
+        // when the real count is genuinely 0, pointing to the map instead
+        // of leaving an unexplained zero. Doesn't say anything about how
+        // the map's pins got there — just softens what "0" means here.
+        hint={stats && stats.realTotalReports === 0 ? t("home.stats.total.zeroHint") : undefined}
         loading={loading}
         delay={0}
       />
@@ -50,11 +57,13 @@ export function StatsStrip() {
 function StatCard({
   label,
   value,
+  hint,
   loading,
   delay,
 }: {
   label: string;
   value: string;
+  hint?: string;
   loading: boolean;
   delay: number;
 }) {
@@ -74,6 +83,11 @@ function StatCard({
     >
       <div className="text-display-sm text-[var(--color-primary)]">{value}</div>
       <div className="mt-1 text-sm text-[var(--color-text-secondary)]">{label}</div>
+      {hint && (
+        <div className="mt-1.5 text-xs leading-relaxed text-[var(--color-text-muted)]">
+          {hint}
+        </div>
+      )}
     </Card>
   );
 }
