@@ -13,6 +13,49 @@ import "react-leaflet-cluster/dist/assets/MarkerCluster.Default.css";
 
 const DHAKA_CENTER: [number, number] = [23.7808, 90.4];
 
+// Fix (round 2): react-leaflet's MapContainer measures its DOM container's
+// size ONCE, at the moment L.map() is constructed. On mobile, the browser
+// address bar collapsing/expanding after initial paint changes the real
+// visible viewport height asynchronously — if that settling happens after
+// Leaflet's one-time measurement, the map's internal tile grid stays
+// wrong permanently, since nothing tells Leaflet to re-check. This
+// component calls invalidateSize() (Leaflet's official "re-measure your
+// container now" method) once shortly after mount to catch the common
+// case, and again on every real resize/orientation event, so a late or
+// changing container height is caught rather than silently ignored. This
+// fixes the mount-timing half of the bug; the h-dvh fix in layout.tsx
+// fixes the other half (the container's CSS height itself being wrong).
+function MapResizeHandler() {
+  const map = useMap();
+
+  useEffect(() => {
+    // Catches the common case: address bar collapses shortly after load,
+    // container's true height settles a beat after Leaflet's initial
+    // measurement. 300ms is enough for that settle on real devices without
+    // being long enough to visibly delay the map becoming usable.
+    const initialTimer = setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
+
+    // Also re-check on any real viewport change afterward (rotating the
+    // phone, address bar toggling again while scrolling, etc.) — not just
+    // the initial mount.
+    function handleResize() {
+      map.invalidateSize();
+    }
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
+
+    return () => {
+      clearTimeout(initialTimer);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
+  }, [map]);
+
+  return null;
+}
+
 // V2: pin clustering (spec section 8 — "sensible clustering"). At real
 // report volume, dense areas would otherwise render as a pile of
 // overlapping full-size markers with no way to tell how many reports are
@@ -222,6 +265,7 @@ export function SafetyMap({
       style={{ height: "100%", width: "100%" }}
       className="dusk-tiles"
     >
+      <MapResizeHandler />
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -304,6 +348,3 @@ export function SafetyMap({
     </>
   );
 }
-
-
-
