@@ -67,11 +67,13 @@ export interface MapFilters {
 }
 
 export interface StatsData {
-  // V2: split from a single totalReports into real vs. seed counts. See
-  // src/app/api/stats/route.ts — seed/launch-filler reports must never be
-  // silently counted as community reports in any UI that reads this type.
-  realTotalReports: number;
-  seedTotalReports: number;
+  // V2 fix, round 2: back to a single honest totalReports. This
+  // intentionally counts seed AND real reports together — see
+  // src/app/api/stats/route.ts for why: seed reports retire (status
+  // flips to 'removed') on the same schedule they disappear from the map,
+  // so this number automatically drops when the map does. No separate
+  // real/seed split needed for that to stay in sync.
+  totalReports: number;
   reportsToday: number;
   topAreas: { area_name: string; count: number }[];
   dayVsNight: { day: number; night: number };
