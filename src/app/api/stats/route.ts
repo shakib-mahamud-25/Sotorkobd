@@ -1,29 +1,32 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 
-// V2 fix: every query here previously filtered only on status='published',
-// with no is_seed exclusion — meaning the ~25 launch seed reports were
-// silently counted as real community reports in every homepage stat. This
-// was found during the V2 audit and fixed before any Insights work was
-// built on top of this route, since Insights would otherwise inherit the
-// same mixing. Seed and real counts are now tracked separately so the UI
-// can be explicit about what's real ("realTotalReports") vs. what's shown
-// to avoid an empty map at launch ("seedTotalReports"), never blending them
-// into one number presented as community data.
+// V2 fix, round 2: stats/Insights previously excluded is_seed reports
+// entirely, so the homepage/Insights numbers never matched what was
+// visibly on the map (which always showed all published reports,
+// including seed). That mismatch was intentional in the first version of
+// this fix — the goal then was making sure seed data was never presented
+// AS real community data.
+//
+// The actual requirement, confirmed directly: seed data SHOULD count here
+// too, for consistency across map/Insights/homepage — but only while it's
+// still live. Once a seed report crosses the gradual retirement threshold
+// (mark_seed_retirement_eligibility() + retire_eligible_seed_reports() in
+// migration 003), its status flips to 'removed', not is_seed staying
+// true forever. Since every query below already filters on
+// status = 'published', simply removing the is_seed exclusion means these
+// numbers automatically stay in sync with the map with zero extra sync
+// logic: a seed report counts here for exactly as long as it's visible on
+// the map, and stops counting the same moment the retirement job removes
+// it — because both the map and this route are reading the same
+// status = 'published' condition, driven by the same underlying data.
 export async function GET() {
   const supabase = createServiceClient();
 
-  const { count: realTotalReports } = await supabase
+  const { count: totalReports } = await supabase
     .from("reports")
     .select("*", { count: "exact", head: true })
-    .eq("status", "published")
-    .eq("is_seed", false);
-
-  const { count: seedTotalReports } = await supabase
-    .from("reports")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "published")
-    .eq("is_seed", true);
+    .eq("status", "published");
 
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
@@ -32,17 +35,14 @@ export async function GET() {
     .from("reports")
     .select("*", { count: "exact", head: true })
     .eq("status", "published")
-    .eq("is_seed", false)
     .gte("created_at", todayStart.toISOString());
 
-  // Trend/breakdown data: real reports only. Seed data is launch filler, not
-  // a community signal, and must never appear in "what areas/times are
-  // people reporting" breakdowns.
+  // Trend/breakdown data now includes seed reports too, for the same
+  // consistency reason — matches whatever's currently live on the map.
   const { data: allReports } = await supabase
     .from("reports")
     .select("area_name, time_of_day, created_at, category_id, severity")
     .eq("status", "published")
-    .eq("is_seed", false)
     .limit(5000);
 
   const areaCounts: Record<string, number> = {};
@@ -99,16 +99,11 @@ export async function GET() {
     .map(([week, count]) => ({ week, count }));
 
   return NextResponse.json({
-    // Real community data — safe to present as "N community reports".
-    realTotalReports: realTotalReports ?? 0,
+    totalReports: totalReports ?? 0,
     reportsToday: reportsToday ?? 0,
     topAreas,
     dayVsNight: { day: dayCount, night: nightCount },
     weeklyTrend,
-    // Seed/launch filler count — present separately if shown at all (e.g.
-    // "map also includes N illustrative example reports"), never folded
-    // into realTotalReports.
-    seedTotalReports: seedTotalReports ?? 0,
     // Added for the Insights page (Phase 6). Not consumed by StatsStrip.tsx,
     // so adding these fields doesn't touch the homepage.
     allAreas,
