@@ -93,7 +93,21 @@ export default function MapPage() {
   }
 
   return (
-    <div className="flex min-h-[560px] flex-1 flex-col md:flex-row">
+    // Fix: the previous min-h-[560px] + flex-1 chain relied on every
+    // ancestor (html -> body -> main -> this div) correctly propagating
+    // height via flexbox, with no single element establishing a real,
+    // definite pixel height. On desktop this was usually masked because
+    // page content naturally exceeded the min-height. On mobile, where the
+    // browser's address bar dynamically shows/hides and changes the visible
+    // viewport height, this pattern is a well-known cause of Leaflet
+    // mounting into a container that measures 0px tall and never
+    // recovering (Leaflet only measures container size once, on mount).
+    // h-dvh ("dynamic viewport height") is the modern CSS unit built
+    // specifically for this mobile browser-chrome problem — it resolves to
+    // the actual visible viewport height at all times, not the layout
+    // viewport, giving the whole chain below a real, non-flex-dependent
+    // height to inherit from.
+    <div className="flex h-dvh min-h-[560px] flex-1 flex-col md:flex-row">
       {/* Desktop sidebar */}
       <aside className="hidden w-80 min-h-0 flex-none overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:block">
         <h1 className="text-display-sm mb-6 text-[var(--color-primary)]">
