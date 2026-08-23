@@ -42,7 +42,7 @@ export const translations = {
     "insights.headline.label": "community reports",
     "insights.headline.scope": "Dhaka · all time",
     "insights.headline.context":
-      "These figures represent reports submitted by Sotorko users and should not be interpreted as official crime statistics.",
+      "These figures reflect reports on Sotorko's map and should not be interpreted as official crime statistics.",
     "insights.dayNight.title": "When are reports most common?",
     "insights.dayNight.day": "Day",
     "insights.dayNight.night": "Evening / night",
@@ -50,7 +50,7 @@ export const translations = {
     "insights.areas.title": "Where reports are recurring",
     "insights.trend.title": "How reporting has changed",
     "insights.disclaimer":
-      "Sotorko's data reflects what community members have chosen to report, not a complete or verified record of incidents. Areas with fewer reports are not necessarily safer — they may simply have fewer active reporters.",
+      "Sotorko's data reflects what's been reported on the map, not a complete or verified record of incidents. Areas with fewer reports are not necessarily safer — they may simply have fewer active reporters.",
 
     // Accessibility (Phase 8)
     "report.severity.valueText": "{n} out of 5",
@@ -222,7 +222,7 @@ export const translations = {
     "insights.headline.label": "কমিউনিটি রিপোর্ট",
     "insights.headline.scope": "ঢাকা · সর্বমোট",
     "insights.headline.context":
-      "এই পরিসংখ্যান সতর্কো ব্যবহারকারীদের জমা দেওয়া রিপোর্টের প্রতিনিধিত্ব করে এবং একে সরকারি অপরাধ পরিসংখ্যান হিসেবে বিবেচনা করা উচিত নয়।",
+      "এই পরিসংখ্যান সতর্কোর মানচিত্রে থাকা রিপোর্টের প্রতিনিধিত্ব করে এবং একে সরকারি অপরাধ পরিসংখ্যান হিসেবে বিবেচনা করা উচিত নয়।",
     "insights.dayNight.title": "কখন সবচেয়ে বেশি রিপোর্ট হয়?",
     "insights.dayNight.day": "দিন",
     "insights.dayNight.night": "সন্ধ্যা / রাত",
@@ -230,7 +230,7 @@ export const translations = {
     "insights.areas.title": "কোন এলাকায় বারবার রিপোর্ট হচ্ছে",
     "insights.trend.title": "রিপোর্টিং কীভাবে পরিবর্তিত হয়েছে",
     "insights.disclaimer":
-      "সতর্কোর তথ্য কমিউনিটি সদস্যদের রিপোর্ট করা বিষয় প্রতিফলিত করে, ঘটনার সম্পূর্ণ বা যাচাইকৃত রেকর্ড নয়। কম রিপোর্ট থাকা এলাকা মানেই তা নিরাপদ নয় — সেখানে হয়তো সক্রিয় রিপোর্টকারী কম।",
+      "সতর্কোর তথ্য মানচিত্রে থাকা রিপোর্ট প্রতিফলিত করে, ঘটনার সম্পূর্ণ বা যাচাইকৃত রেকর্ড নয়। কম রিপোর্ট থাকা এলাকা মানেই তা নিরাপদ নয় — সেখানে হয়তো সক্রিয় রিপোর্টকারী কম।",
 
     // অ্যাক্সেসিবিলিটি (ফেজ ৮)
     "report.severity.valueText": "৫ এর মধ্যে {n}",
@@ -356,6 +356,3 @@ export const translations = {
 } as const;
 
 export type TranslationKey = keyof typeof translations.en;
-
-
-
