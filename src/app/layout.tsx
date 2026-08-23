@@ -35,8 +35,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col">
+    // Fix (round 2 — h-full on <html> was the actual root cause the first
+    // h-dvh patch on the map page alone didn't address): Tailwind's h-full
+    // compiles to height: 100%. On <html> specifically, "100% of what?"
+    // resolves against the browser's initial containing block, which is
+    // sized using the LAYOUT viewport, not the dynamic one — the same
+    // category of stale-viewport problem as a literal 100vh, just one level
+    // removed. Every descendant relying on percentage/flex height (body,
+    // main, the map page's containers) inherited that stale ceiling no
+    // matter what dvh units were used further down the tree. h-dvh on
+    // <html> anchors the ENTIRE chain to the real, live visual viewport
+    // height from the root, so downstream h-full/flex-1/100% math is
+    // finally resolving against a correct number.
+    <html lang="en" className="h-dvh antialiased">
+      <body className="flex h-dvh flex-col">
         <I18nProvider>
           <ServiceWorkerRegistration />
           <Header />
