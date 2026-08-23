@@ -23,18 +23,15 @@ export function StatsStrip() {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <StatCard
         label={t("home.stats.total")}
-        // V2: renamed from stats.totalReports to stats.realTotalReports — the
-        // API now excludes seed/launch-filler reports from this count, so
-        // what's shown here is always a real community-report number, never
-        // inflated by the ~25 illustrative reports seeded at launch.
-        value={stats ? stats.realTotalReports.toLocaleString(locale === "bn" ? "bn-BD" : "en-US") : "0"}
-        // Fix: a bare "0" here next to a map that visibly has pins on it
-        // read as broken/confusing, even though both numbers were
-        // individually correct. This shows a small explanatory hint only
-        // when the real count is genuinely 0, pointing to the map instead
-        // of leaving an unexplained zero. Doesn't say anything about how
-        // the map's pins got there — just softens what "0" means here.
-        hint={stats && stats.realTotalReports === 0 ? t("home.stats.total.zeroHint") : undefined}
+        // V2 fix, round 2: back to stats.totalReports (was split into
+        // realTotalReports/seedTotalReports, then reverted — see
+        // src/app/api/stats/route.ts). This number now includes seed data
+        // while it's live, matching what's actually shown on the map, and
+        // drops automatically as seed reports retire. The zero-state hint
+        // that used to live here is gone too — it existed specifically to
+        // explain a real/seed mismatch that no longer exists; 0 now
+        // genuinely means the map has nothing to show yet.
+        value={stats ? stats.totalReports.toLocaleString(locale === "bn" ? "bn-BD" : "en-US") : "0"}
         loading={loading}
         delay={0}
       />
@@ -57,13 +54,11 @@ export function StatsStrip() {
 function StatCard({
   label,
   value,
-  hint,
   loading,
   delay,
 }: {
   label: string;
   value: string;
-  hint?: string;
   loading: boolean;
   delay: number;
 }) {
@@ -83,11 +78,6 @@ function StatCard({
     >
       <div className="text-display-sm text-[var(--color-primary)]">{value}</div>
       <div className="mt-1 text-sm text-[var(--color-text-secondary)]">{label}</div>
-      {hint && (
-        <div className="mt-1.5 text-xs leading-relaxed text-[var(--color-text-muted)]">
-          {hint}
-        </div>
-      )}
     </Card>
   );
 }
