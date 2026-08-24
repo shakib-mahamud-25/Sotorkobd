@@ -60,7 +60,7 @@ export const translations = {
     // Home
     "home.title": "Know before you go.",
     "home.subtitle":
-      "Sotorko is a crowdsourced safety map built for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
+      "Sotorko is a crowdsourced safety map for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
     "home.cta.map": "Check an area",
     "home.cta.report": "Report an incident",
     "home.stats.title": "Right now, across Dhaka",
@@ -189,7 +189,7 @@ export const translations = {
     // অফলাইন ফলব্যাক (PWA)
     "offline.title": "আপনি অফলাইনে আছেন",
     "offline.body":
-      "লাইভ মানচিত্র দেখাতে এবং নিরাপদে রিপোর্ট গ্রহণ করতে সতর্কোর একটি সংযোগ প্রয়োজন। সংযোগ ফিরে এলে আবার চেষ্টা করুন।",
+      "লাইভ মানচিত্র দেখাতে এবং নিরাপদে রিপোর্ট গ্রহণ করতে সতর্কের একটি সংযোগ প্রয়োজন। সংযোগ ফিরে এলে আবার চেষ্টা করুন।",
     "offline.retry": "আবার চেষ্টা করুন",
 
     // পুশ নোটিফিকেশন অপ্ট-ইন (ফেজ ৪)
@@ -197,10 +197,10 @@ export const translations = {
     "notify.subscribed": "আপনি জানতে পারবেন",
     "notify.error": "নোটিফিকেশন চালু করা যায়নি। আবার চেষ্টা করুন।",
     "notify.iosInstallHint":
-      "আইফোনে নোটিফিকেশন পেতে প্রথমে সতর্কোকে হোম স্ক্রিনে যোগ করুন: শেয়ার-এ ট্যাপ করুন, তারপর \"Add to Home Screen\" নির্বাচন করুন।",
+      "আইফোনে নোটিফিকেশন পেতে প্রথমে সতর্ককে হোম স্ক্রিনে যোগ করুন: শেয়ার-এ ট্যাপ করুন, তারপর \"Add to Home Screen\" নির্বাচন করুন।",
 
     // ইনস্টল প্রম্পট (ফেজ ৩)
-    "install.title": "সতর্কো ইনস্টল করুন",
+    "install.title": "সতর্ক ইনস্টল করুন",
     "install.body": "দ্রুত ও ব্যক্তিগত অ্যাক্সেসের জন্য এটি হোম স্ক্রিনে যোগ করুন।",
     "install.action": "ইনস্টল করুন",
     "install.dismiss": "বাতিল",
@@ -213,7 +213,7 @@ export const translations = {
     "resources.needHelp": "সাহায্য দরকার?",
     "resources.visitWebsite": "ওয়েবসাইট দেখুন",
     "resources.disclaimer":
-      "সতর্কো একটি কমিউনিটি রিপোর্টিং টুল, জরুরি সেবা নয়। জরুরি পরিস্থিতিতে সরাসরি ৯৯৯ নম্বরে যোগাযোগ করুন।",
+      "সতর্ক একটি কমিউনিটি রিপোর্টিং টুল, জরুরি সেবা নয়। জরুরি পরিস্থিতিতে সরাসরি ৯৯৯ নম্বরে যোগাযোগ করুন।",
 
     // লাইটওয়েট ইনসাইটস (ফেজ ৬)
     "nav.insights": "পর্যবেক্ষণ",
@@ -222,7 +222,7 @@ export const translations = {
     "insights.headline.label": "কমিউনিটি রিপোর্ট",
     "insights.headline.scope": "ঢাকা · সর্বমোট",
     "insights.headline.context":
-      "এই পরিসংখ্যান সতর্কোর মানচিত্রে থাকা রিপোর্টের প্রতিনিধিত্ব করে এবং একে সরকারি অপরাধ পরিসংখ্যান হিসেবে বিবেচনা করা উচিত নয়।",
+      "এই পরিসংখ্যান সতর্কের মানচিত্রে থাকা রিপোর্টের প্রতিনিধিত্ব করে এবং একে সরকারি অপরাধ পরিসংখ্যান হিসেবে বিবেচনা করা উচিত নয়।",
     "insights.dayNight.title": "কখন সবচেয়ে বেশি রিপোর্ট হয়?",
     "insights.dayNight.day": "দিন",
     "insights.dayNight.night": "সন্ধ্যা / রাত",
@@ -230,7 +230,7 @@ export const translations = {
     "insights.areas.title": "কোন এলাকায় বারবার রিপোর্ট হচ্ছে",
     "insights.trend.title": "রিপোর্টিং কীভাবে পরিবর্তিত হয়েছে",
     "insights.disclaimer":
-      "সতর্কোর তথ্য মানচিত্রে থাকা রিপোর্ট প্রতিফলিত করে, ঘটনার সম্পূর্ণ বা যাচাইকৃত রেকর্ড নয়। কম রিপোর্ট থাকা এলাকা মানেই তা নিরাপদ নয় — সেখানে হয়তো সক্রিয় রিপোর্টকারী কম।",
+      "সতর্কের তথ্য মানচিত্রে থাকা রিপোর্ট প্রতিফলিত করে, ঘটনার সম্পূর্ণ বা যাচাইকৃত রেকর্ড নয়। কম রিপোর্ট থাকা এলাকা মানেই তা নিরাপদ নয় — সেখানে হয়তো সক্রিয় রিপোর্টকারী কম।",
 
     // অ্যাক্সেসিবিলিটি (ফেজ ৮)
     "report.severity.valueText": "৫ এর মধ্যে {n}",
@@ -239,7 +239,7 @@ export const translations = {
 
     "home.title": "যাওয়ার আগে জেনে নিন।",
     "home.subtitle":
-      "সতর্ক ঢাকার নারীদের জন্য তৈরি একটি ক্রাউডসোর্সড নিরাপত্তা মানচিত্র। আশেপাশে কী রিপোর্ট হয়েছে দেখুন, এবং আপনার সাথে যা ঘটেছে তা জানান — সম্পূর্ণ বেনামে।",
+      "ঢাকার নারীদের জন্য একটি ক্রাউডসোর্সড নিরাপত্তা মানচিত্র সতর্ক। আশেপাশে কী রিপোর্ট হয়েছে দেখুন, এবং আপনার সাথে যা ঘটেছে তা জানান — সম্পূর্ণ বেনামে।",
     "home.cta.map": "এলাকা যাচাই করুন",
     "home.cta.report": "ঘটনা রিপোর্ট করুন",
     "home.stats.title": "এই মুহূর্তে, ঢাকা জুড়ে",
