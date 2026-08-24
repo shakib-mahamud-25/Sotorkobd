@@ -11,7 +11,7 @@ import type { MetadataRoute } from "next";
 // manifest values can't reference CSS custom properties.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Sotorko — সতর্কো",
+    name: "Sotorko — সতর্ক",
     short_name: "Sotorko",
     description:
       "A crowdsourced, anonymous safety map for women navigating Dhaka.",
