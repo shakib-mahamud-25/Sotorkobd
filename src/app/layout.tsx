@@ -10,7 +10,7 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 export const metadata: Metadata = {
   title: "Sotorko — Women's Safety Map for Dhaka",
   description:
-    "A crowdsourced safety map built for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
+    "A crowdsourced safety map for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
   // PWA: iOS doesn't read app/manifest.ts the same way Chrome/Android does,
   // so these apple-specific tags are needed for a good iOS home-screen
   // experience (standalone display, correct title). See
