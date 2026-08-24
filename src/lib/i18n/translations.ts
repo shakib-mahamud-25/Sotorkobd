@@ -60,7 +60,7 @@ export const translations = {
     // Home
     "home.title": "Know before you go.",
     "home.subtitle":
-      "Sotorko is a crowdsourced safety map built by and for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
+      "Sotorko is a crowdsourced safety map built for women in Dhaka. See what's been reported nearby, and share what happened to you — anonymously.",
     "home.cta.map": "Check an area",
     "home.cta.report": "Report an incident",
     "home.stats.title": "Right now, across Dhaka",
@@ -239,7 +239,7 @@ export const translations = {
 
     "home.title": "যাওয়ার আগে জেনে নিন।",
     "home.subtitle":
-      "সতর্ক ঢাকার নারীদের জন্য, নারীদের দ্বারা তৈরি একটি ক্রাউডসোর্সড নিরাপত্তা মানচিত্র। আশেপাশে কী রিপোর্ট হয়েছে দেখুন, এবং আপনার সাথে যা ঘটেছে তা জানান — সম্পূর্ণ বেনামে।",
+      "সতর্ক ঢাকার নারীদের জন্য তৈরি একটি ক্রাউডসোর্সড নিরাপত্তা মানচিত্র। আশেপাশে কী রিপোর্ট হয়েছে দেখুন, এবং আপনার সাথে যা ঘটেছে তা জানান — সম্পূর্ণ বেনামে।",
     "home.cta.map": "এলাকা যাচাই করুন",
     "home.cta.report": "ঘটনা রিপোর্ট করুন",
     "home.stats.title": "এই মুহূর্তে, ঢাকা জুড়ে",
