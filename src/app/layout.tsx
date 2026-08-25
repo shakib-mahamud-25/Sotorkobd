@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import { I18nProvider } from "@/lib/i18n/context";
@@ -56,9 +57,11 @@ export default function RootLayout({
           <Footer />
           <InstallPrompt />
         </I18nProvider>
-        <!-- Cloudflare Web Analytics -->
-          <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "147f3c2044624a73a6c7fa08d13d7055"}'></script>
-          <!-- End Cloudflare Web Analytics -->
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "147f3c2044624a73a6c7fa08d13d7055"}'
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
